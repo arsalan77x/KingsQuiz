@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10pt"
+        android:layout_marginEnd="10pt"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-20pt"
+            android:layout_marginBottom="-20pt"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            android:src="@drawable/quiz_king_ico" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/profile_name"
+            android:textAlignment="center"
+            android:layout_marginBottom="20dp"
+            android:textColor="#4E4E4E"
+            android:textSize="15pt" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/changeEmailText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:autofillHints="change email"
+                android:hint="@string/change_email"
+                android:inputType="textEmailAddress" />
+
+            <Button
+                android:id="@+id/applyButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:backgroundTint="#292929"
+                android:text="@string/apply" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/changePasswordText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="20dp"
+                android:autofillHints="change password"
+                android:hint="change password"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/applyButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:backgroundTint="#292929"
+                android:text="@string/apply" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/changeUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="20dp"
+                android:autofillHints="change password"
+                android:hint="@string/change_username"
+                />
+
+            <Button
+                android:id="@+id/applyButton3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:backgroundTint="#292929"
+                android:text="@string/apply" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_height="wrap_content"
+
+            android:backgroundTint="#292929"
+            android:text="@string/logout" />
+        <Button
+            android:id="@+id/mainMenuButton"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20pt"
+            android:backgroundTint="#292929"
+            android:text="@string/main_menu" />
+
+    </LinearLayout>
+
+</ScrollView>

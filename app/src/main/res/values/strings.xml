@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">quiz_of_kings</string>
+    <string name="register_name">Register</string>
+    <string name="login_name">Login</string>
+    <string name="your_email">Your Email</string>
+    <string name="your_password">Your Password</string>
+    <string name="register">Register</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login">Login</string>
+    <string name="button">Button</string>
+    <string name="start_game">start game</string>
+    <string name="setting">setting</string>
+    <string name="profile">profile</string>
+    <string name="scoreboard">scoreboard</string>
+    <string name="exit">exit</string>
+    <string name="logout">logout</string>
+    <string name="don_t_have_an_account">don\'t have an account?</string>
+    <string name="profile_name">Profile</string>
+    <string name="change_email">change email</string>
+    <string name="apply">Apply</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="scoreboard_name">Scoreboard</string>
+    <string name="rank">Rank</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="email">Email:</string>
+    <string name="score">Score:</string>
+    <string name="change_username">change username</string>
+</resources>

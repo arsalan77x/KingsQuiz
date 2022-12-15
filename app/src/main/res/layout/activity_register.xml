@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:src="@drawable/quiz_king_ico"
+            android:layout_marginStart="10pt"
+            android:layout_marginEnd="10pt"
+            android:layout_marginTop="-20pt"
+            android:scaleX=".4"
+            android:scaleY=".4"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:textAlignment="center"
+            android:textSize="15pt"
+            android:textColor="#4E4E4E"
+            android:fontFamily="sans-serif-medium"
+            />
+
+
+        <EditText
+            android:id="@+id/emailText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10pt"
+            android:layout_marginTop="10pt"
+            android:layout_marginEnd="10pt"
+            android:autofillHints="Your email"
+            android:hint="@string/your_email"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/passwordText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10pt"
+            android:layout_marginStart="10pt"
+            android:layout_marginTop="10pt"
+            android:hint = "@string/your_password"
+            android:autofillHints="Your password"
+            android:inputType="textPassword"
+            />
+
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="40pt"
+            android:layout_marginStart="40pt"
+            android:layout_height="wrap_content"
+            android:text="@string/register_name"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#292929"
+            />
+        <Button
+            android:id="@+id/mainMenuButton"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="40pt"
+            android:layout_marginStart="40pt"
+            android:layout_height="wrap_content"
+            android:text="@string/main_menu"
+            android:backgroundTint="#292929"
+            />
+
+    </LinearLayout>
+</ScrollView>
