@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +24,10 @@ public class SettingActivity extends AppCompatActivity {
     int numberCount = 0;
     int categoryCount = 0;
     public static boolean isBlueOn = false;
+    private SettingsDatabase settingsDatabase;
+    TextView difficultyText;
+    TextView numbersText;
+    TextView categoryText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +48,13 @@ public class SettingActivity extends AppCompatActivity {
         Button decreaseButton3 = (Button) findViewById(R.id.decreaseButton3);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button blueThemeButton = (Button) findViewById(R.id.blueTheme);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button blackThemeButton = (Button) findViewById(R.id.blackTheme);
-        TextView difficultyText = (TextView) findViewById(R.id.difficulty);
-        TextView numbersText = (TextView) findViewById(R.id.numbers);
-        TextView categoryText = (TextView) findViewById(R.id.category);
+        difficultyText = (TextView) findViewById(R.id.difficulty);
+        numbersText = (TextView) findViewById(R.id.numbers);
+        categoryText = (TextView) findViewById(R.id.category);
+
+
+        settingsDatabase = new SettingsDatabase(SettingActivity.this);
+        initializeSettings();
 
         mainMainButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +74,7 @@ public class SettingActivity extends AppCompatActivity {
                 } else if (difficultyText.getText().equals("Easy")) {
                     difficultyText.setText("Medium");
                 }
-
+                updateSettings();
             }
         });
 
@@ -79,6 +89,7 @@ public class SettingActivity extends AppCompatActivity {
                 } else if (difficultyText.getText().toString().equals("Easy")) {
                     difficultyText.setText("Hard");
                 }
+                updateSettings();
             }
         });
 
@@ -88,6 +99,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!numbersText.getText().equals("0")) {
                     numbersText.setText(Integer.parseInt(numbersText.getText().toString()) + 1 + "");
+                    updateSettings();
                 }
             }
         });
@@ -98,6 +110,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!numbersText.getText().equals("1")) {
                     numbersText.setText(Integer.parseInt(numbersText.getText().toString()) - 1 + "");
+                    updateSettings();
                 }
             }
         });
@@ -125,6 +138,19 @@ public class SettingActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @SuppressLint("Range")
+    private void initializeSettings() {
+        Cursor cursor = settingsDatabase.fetchSettings();
+        difficultyText.setText(cursor.getString(cursor.getColumnIndex(SettingsDatabase.DIFFICULTY)));
+        numbersText.setText(cursor.getString(cursor.getColumnIndex(SettingsDatabase.QUESTIONS_NUMBER)));
+        categoryText.setText(cursor.getString(cursor.getColumnIndex(SettingsDatabase.CATEGORY)));
+    }
+
+    private void updateSettings() {
+        settingsDatabase.updateSettings((String) difficultyText.getText(),
+                Integer.parseInt((String) numbersText.getText()), (String) categoryText.getText());
     }
 
     private void launchSettingActivity(View view) {
