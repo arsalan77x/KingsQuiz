@@ -34,4 +34,15 @@
     <string name="email">Email:</string>
     <string name="score">Score:</string>
     <string name="change_username">change username</string>
+    <string name="setting_name">Settings</string>
+    <string name="difficulty">Difficulty:</string>
+    <string name="numbers">Numbers:</string>
+    <string name="category">Category:</string>
+    <string name="back"><![CDATA[<]]></string>
+    <string name="forward"><![CDATA[>]]></string>
+    <string name="blue">Blue</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+    <string name="themes">Themes</string>
+    <string name="easy">Easy</string>
 </resources>

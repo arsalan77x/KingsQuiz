@@ -35,16 +35,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:backgroundTint="#292929"
-
                 android:text="@string/start_game" />
 
             <Button
                 android:id="@+id/settingButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:backgroundTint="#292929"
                 android:text="@string/setting" />
 
             <Button
@@ -52,7 +48,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:backgroundTint="#292929"
                 android:text="@string/profile" />
 
             <Button
@@ -60,7 +55,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:backgroundTint="#292929"
                 android:text="@string/scoreboard" />
 
             <Button
@@ -68,7 +62,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:backgroundTint="#292929"
                 android:text="@string/exit" />
 
         </LinearLayout>

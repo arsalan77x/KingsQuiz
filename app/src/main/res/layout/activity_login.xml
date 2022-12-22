@@ -28,7 +28,6 @@
             android:text="@string/login"
             android:textAlignment="center"
             android:textSize="15pt"
-            android:textColor="#4E4E4E"
             android:fontFamily="sans-serif-medium"
             />
 
@@ -64,7 +63,7 @@
             android:layout_height="wrap_content"
             android:text="@string/login_name"
             android:layout_marginTop="20dp"
-            android:backgroundTint="#292929"
+
             />
         <Button
             android:id="@+id/mainMenuButton"
@@ -73,7 +72,7 @@
             android:layout_marginStart="40pt"
             android:layout_height="wrap_content"
             android:text="@string/main_menu"
-            android:backgroundTint="#292929"
+
             />
 
         <Button
@@ -85,10 +84,8 @@
             android:layout_height="wrap_content"
             android:text="@string/don_t_have_an_account"
             android:textSize="4pt"
-            android:backgroundTint="#00292929"
             android:background="#00292929"
             android:textColor="@color/black"
-
             />
     </LinearLayout>
 

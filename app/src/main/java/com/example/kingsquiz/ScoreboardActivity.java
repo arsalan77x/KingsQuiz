@@ -7,11 +7,15 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ScoreboardActivity extends AppCompatActivity {
 
@@ -19,12 +23,26 @@ public class ScoreboardActivity extends AppCompatActivity {
     public static String email = "";
     public static String userScore = "";
     public static String userRank = "";
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (SettingActivity.isBlueOn) {
+            this.setTheme(R.style.Theme1);
+        } else {
+            this.setTheme(R.style.Theme2);
+        }
         setContentView(R.layout.activity_scoreboard);
+
+        Collections.sort(MainActivity.userArrayList, new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                return Math.round(o2.getScore() - (o1.getScore()));
+            }
+        });
+
 
 
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) LinearLayout parent = (LinearLayout) findViewById(R.id.parent);

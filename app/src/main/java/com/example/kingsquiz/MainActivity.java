@@ -1,12 +1,14 @@
 package com.example.kingsquiz;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,26 +17,37 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
     public static User userLoggedIn;
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static SQLiteDatabase loggedInUser;
-    String email ="";
-    public static  DataBaseUser userDatabase;
+    String email = "";
+    public static DataBaseUser userDatabase;
     public static ArrayList<User> userArrayList;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (SettingActivity.isBlueOn) {
+            this.setTheme(R.style.Theme1);
+        } else {
+            this.setTheme(R.style.Theme2);
+        }
         setContentView(R.layout.activity_main);
+
 
         Button profileButton = (Button) findViewById(R.id.profileButton);
         Button startButton = (Button) findViewById(R.id.gameButton);
         Button settingButton = (Button) findViewById(R.id.settingButton);
         Button exitButton = (Button) findViewById(R.id.exitButton);
         Button scoreboardButton = (Button) findViewById(R.id.scoreboardButton);
+
+
+
 
         userDatabase = new DataBaseUser(MainActivity.this);
         userArrayList = new ArrayList<>();
@@ -49,12 +62,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (resultSet.getCount() == 0) {
-             email = "";
+            email = "";
         } else {
-             email = resultSet.getString(0);
-             userLoggedIn = LoginActivity.getUserByEmail(email);
+            email = resultSet.getString(0);
+            userLoggedIn = LoginActivity.getUserByEmail(email);
         }
-
 
 
         profileButton.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +86,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 launchScoreBoardActivity(view);
+            }
+        });
+
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchSettingActivity(view);
             }
         });
 
@@ -101,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void launchScoreBoardActivity(View view) {
         Intent intent = new Intent(this, ScoreboardActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchSettingActivity(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
 }

@@ -15,8 +15,13 @@ public class UserInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (SettingActivity.isBlueOn) {
+            this.setTheme(R.style.Theme1);
+        } else {
+            this.setTheme(R.style.Theme2);
+        }
         setContentView(R.layout.activity_user_info);
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button mainMainButton = (Button) findViewById(R.id.mainMenuButton);
+        Button mainMainButton = (Button) findViewById(R.id.mainMenuButton);
         TextView usernameText = (TextView) findViewById(R.id.username);
         TextView emailText = (TextView) findViewById(R.id.email);
         TextView scoreText = (TextView) findViewById(R.id.score);

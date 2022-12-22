@@ -23,6 +23,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (SettingActivity.isBlueOn) {
+            this.setTheme(R.style.Theme1);
+        } else {
+            this.setTheme(R.style.Theme2);
+        }
         setContentView(R.layout.activity_login);
 
         Button registerButton = (Button) findViewById(R.id.loginButton);
@@ -31,15 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         Button noAccountButton = (Button) findViewById(R.id.noAccountButton);
         Button mainMainButton = (Button) findViewById(R.id.mainMenuButton);
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-//        SQLiteDatabase loggedInUser = openOrCreateDatabase("loggedInUser",MODE_PRIVATE,null);
-//        loggedInUser.execSQL("CREATE TABLE IF NOT EXISTS LoggedIn (Username TEXT);");
-//        Cursor resultSet = loggedInUser.rawQuery("Select * from LoggedIn",null);
-//        resultSet.moveToFirst();
-//        String email = resultSet.getString(0);
-//        userLoggedIn = getUserByEmail(email);
-//        Log.d(LOG_TAG, email);
 
-        //loggedInUser.delete("LoggedIn", "name=?", new String[]{courseName});
 
 
         noAccountButton.setOnClickListener(new View.OnClickListener() {

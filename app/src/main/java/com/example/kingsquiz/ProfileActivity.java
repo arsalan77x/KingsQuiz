@@ -22,6 +22,11 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (SettingActivity.isBlueOn) {
+            this.setTheme(R.style.Theme1);
+        } else {
+            this.setTheme(R.style.Theme2);
+        }
         setContentView(R.layout.activity_profile);
 
         Button logoutButton = (Button) findViewById(R.id.logoutButton);
@@ -96,7 +101,8 @@ public class ProfileActivity extends AppCompatActivity {
                 String newUser = changeUsername.getText().toString();
                 if (newUser.length() > 0) {
                     MainActivity.userDatabase.updateUser(MainActivity.userLoggedIn.getEmail(),
-                            MainActivity.userLoggedIn.getEmail(), MainActivity.userLoggedIn.getPassword(), Integer.toString(MainActivity.userLoggedIn.getScore()),
+                            MainActivity.userLoggedIn.getEmail(), MainActivity.userLoggedIn.getPassword(),
+                            MainActivity.userLoggedIn.getScore()+"",
                             newUser);
                     Toast.makeText(getApplicationContext(),
                             "Username changed!", Toast.LENGTH_SHORT).show();

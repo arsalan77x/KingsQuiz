@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/setting_name"
+            android:textAlignment="center"
+
+            android:textSize="15pt" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/difficulty"
+
+                android:textSize="9pt" />
+            <Button
+                android:id="@+id/decreaseButton1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+
+                android:text="@string/back" />
+
+            <TextView
+                android:id="@+id/difficulty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:textAlignment="center"
+                android:text="@string/easy"
+
+                android:textSize="9pt" />
+
+            <Button
+                android:id="@+id/increaseButton1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+
+                android:text="@string/forward" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".9"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/numbers"
+
+                android:textSize="9pt" />
+
+            <Button
+                android:id="@+id/decreaseButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+
+                android:text="@string/back" />
+
+            <TextView
+                android:id="@+id/numbers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:textAlignment="center"
+                android:text="10"
+
+                android:textSize="9pt" />
+
+            <Button
+                android:id="@+id/increaseButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+
+                android:text="@string/forward" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:layout_weight="0.9"
+                android:text="@string/category"
+
+                android:textSize="9pt" />
+            <Button
+                android:id="@+id/decreaseButton3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+
+                android:text="@string/back" />
+
+            <TextView
+                android:id="@+id/category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:textAlignment="center"
+                android:text="animals"
+
+                android:textSize="7pt" />
+
+            <Button
+                android:id="@+id/increaseButton3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+
+                android:text="@string/forward" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="sans-serif-medium"
+            android:textAlignment="center"
+            android:text="@string/themes"
+            android:textSize="12pt" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/blackTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:layout_marginEnd="5dp"
+
+            android:text="Black" />
+
+        <Button
+            android:id="@+id/blueTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+
+            android:layout_marginStart="5dp"
+            android:text="@string/blue" />
+
+    </LinearLayout>
+
+        <Button
+            android:id="@+id/mainMenuButton"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="20pt"
+            android:layout_marginStart="20pt"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:text="@string/main_menu"
+            />
+
+
+
+    </LinearLayout>
+
+</ScrollView>
