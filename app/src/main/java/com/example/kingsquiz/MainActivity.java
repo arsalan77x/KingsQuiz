@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static SQLiteDatabase loggedInUser;
     String email = "";
     public static DataBaseUser userDatabase;
+    public static SettingsDatabase settingsDatabase;
     public static ArrayList<User> userArrayList;
 
     @SuppressLint("ResourceType")
@@ -46,12 +47,10 @@ public class MainActivity extends AppCompatActivity {
         Button exitButton = (Button) findViewById(R.id.exitButton);
         Button scoreboardButton = (Button) findViewById(R.id.scoreboardButton);
 
-
-
-
+        settingsDatabase = new SettingsDatabase(MainActivity.this);
         userDatabase = new DataBaseUser(MainActivity.this);
         userArrayList = new ArrayList<>();
-        userArrayList = userDatabase.readCourses();
+        userArrayList = userDatabase.fetchUsers();
 
 
         loggedInUser = openOrCreateDatabase("loggedInUser", MODE_PRIVATE, null);

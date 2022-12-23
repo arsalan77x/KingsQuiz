@@ -67,6 +67,13 @@ public class DataBaseUser extends SQLiteOpenHelper {
         db.update(TABLE_NAME,  values, "email=?", new String[]{lastEmail});
         db.close();
     }
+    public void updateScore(String email, int score) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(SCORE_COL, score);
+        db.update(TABLE_NAME,  values, "email=?", new String[]{email});
+        db.close();
+    }
 
     public void updatePass(String lastPass, String email, String password, String score, String username) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -82,7 +89,7 @@ public class DataBaseUser extends SQLiteOpenHelper {
 
 
 
-    public ArrayList<User> readCourses() {
+    public ArrayList<User> fetchUsers() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursorUser = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
         ArrayList<User> userArrayList = new ArrayList<>();

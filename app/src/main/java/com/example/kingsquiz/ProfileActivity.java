@@ -61,7 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
                     values.put("Username", newEmail);
                     MainActivity.loggedInUser.insert("LoggedIn", null, values);
                     MainActivity.userArrayList = new ArrayList<>();
-                    MainActivity.userArrayList = MainActivity.userDatabase.readCourses();
+                    MainActivity.userArrayList = MainActivity.userDatabase.fetchUsers();
                     MainActivity.userLoggedIn = LoginActivity.getUserByEmail(newEmail);
 
                 } else {
@@ -84,7 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),
                             "Password changed!", Toast.LENGTH_SHORT).show();
                     MainActivity.userArrayList = new ArrayList<>();
-                    MainActivity.userArrayList = MainActivity.userDatabase.readCourses();
+                    MainActivity.userArrayList = MainActivity.userDatabase.fetchUsers();
                     MainActivity.userLoggedIn = LoginActivity.getUserByEmail(MainActivity.userLoggedIn.getEmail());
                 } else {
                     Toast.makeText(getApplicationContext(),
@@ -105,7 +105,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),
                             "Username changed!", Toast.LENGTH_SHORT).show();
                     MainActivity.userArrayList = new ArrayList<>();
-                    MainActivity.userArrayList = MainActivity.userDatabase.readCourses();
+                    MainActivity.userArrayList = MainActivity.userDatabase.fetchUsers();
                     MainActivity.userLoggedIn = LoginActivity.getUserByEmail(MainActivity.userLoggedIn.getEmail());
                 } else {
                     Toast.makeText(getApplicationContext(),

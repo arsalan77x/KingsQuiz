@@ -40,6 +40,7 @@ public class ScoreboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scoreboard);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        MainActivity.userArrayList = MainActivity.userDatabase.fetchUsers();
         Collections.sort(MainActivity.userArrayList, new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {

@@ -10,24 +10,47 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    List<String> difficultyList = Arrays.asList("Easy", "Medium", "Hard");
-    List<String> categoryList = Arrays.asList("cat1", "cat2");
-    int difficultyCount = 0;
-    int numberCount = 0;
-    int categoryCount = 0;
     public static boolean isBlueOn = false;
-    private SettingsDatabase settingsDatabase;
-    TextView difficultyText;
-    TextView numbersText;
-    TextView categoryText;
+    private TextView difficultyText;
+    private TextView numbersText;
+    private Spinner categorySpinner;
+    public static ArrayList<String> categories = new ArrayList<>(Arrays.asList("General Knowledge",
+            "Entertainment: Books",
+            "Entertainment: Film",
+            "Entertainment: Music",
+            "Entertainment: Musicals & Theatres",
+            "Entertainment: Television",
+            "Entertainment: Video Games",
+            "Entertainment: Board Games",
+            "Science & Nature",
+            "Science: Computers",
+            "Science: Mathematics",
+            "Mythology",
+            "Sports",
+            "Geography",
+            "History",
+            "Politics",
+            "Art",
+            "Celebrities",
+            "Animals",
+            "Vehicles",
+            "Entertainment: Comics",
+            "Science: Gadgets",
+            "Entertainment: Japanese Anime & Manga",
+            "Entertainment: Cartoon & Animations"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +66,18 @@ public class SettingActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         Button increaseButton1 = (Button) findViewById(R.id.increaseButton1);
         Button increaseButton2 = (Button) findViewById(R.id.increaseButton2);
-        Button increaseButton3 = (Button) findViewById(R.id.increaseButton3);
         Button decreaseButton1 = (Button) findViewById(R.id.decreaseButton1);
         Button decreaseButton2 = (Button) findViewById(R.id.decreaseButton2);
-        Button decreaseButton3 = (Button) findViewById(R.id.decreaseButton3);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button blueThemeButton = (Button) findViewById(R.id.blueTheme);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button blackThemeButton = (Button) findViewById(R.id.blackTheme);
         difficultyText = (TextView) findViewById(R.id.difficulty);
         numbersText = (TextView) findViewById(R.id.numbers);
-        categoryText = (TextView) findViewById(R.id.category);
 
+        categorySpinner = findViewById(R.id.category_spinner);
+        categorySpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categories);
+        categorySpinner.setAdapter(adapter);
 
-        settingsDatabase = new SettingsDatabase(SettingActivity.this);
         initializeSettings();
 
         increaseButton1.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +132,6 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        //TODO CATEGORY
-
-
-        //
         blackThemeButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -136,15 +155,15 @@ public class SettingActivity extends AppCompatActivity {
 
     @SuppressLint("Range")
     private void initializeSettings() {
-        Cursor cursor = settingsDatabase.fetchSettings();
+        Cursor cursor = MainActivity.settingsDatabase.fetchSettings();
         difficultyText.setText(cursor.getString(cursor.getColumnIndex(SettingsDatabase.DIFFICULTY)));
         numbersText.setText(cursor.getString(cursor.getColumnIndex(SettingsDatabase.QUESTIONS_NUMBER)));
-        categoryText.setText(cursor.getString(cursor.getColumnIndex(SettingsDatabase.CATEGORY)));
+        categorySpinner.setSelection(categories.indexOf(cursor.getString(cursor.getColumnIndex(SettingsDatabase.CATEGORY))));
     }
 
     private void updateSettings() {
-        settingsDatabase.updateSettings((String) difficultyText.getText(),
-                Integer.parseInt((String) numbersText.getText()), (String) categoryText.getText());
+        MainActivity.settingsDatabase.updateSettings((String) difficultyText.getText(),
+                Integer.parseInt((String) numbersText.getText()), categorySpinner.getSelectedItem().toString());
     }
 
     private void launchSettingActivity(View view) {
@@ -161,5 +180,15 @@ public class SettingActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        updateSettings();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

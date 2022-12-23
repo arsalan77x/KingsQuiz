@@ -121,36 +121,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                android:layout_weight="0.9"
-                android:text="@string/category"
-
-                android:textSize="9pt" />
-            <Button
-                android:id="@+id/decreaseButton3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.2"
-
-                android:text="@string/back" />
-
-            <TextView
-                android:id="@+id/category"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="sans-serif-medium"
-                android:textAlignment="center"
-                android:text="animals"
-
-                android:textSize="7pt" />
-
-            <Button
-                android:id="@+id/increaseButton3"
+                android:text="@string/category"
+                android:textSize="9pt" />
+            <Spinner
+                android:id="@+id/category_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.2"
-
-                android:text="@string/forward" />
+                android:spinnerMode="dropdown"
+                android:layout_weight="0.6"/>
 
         </LinearLayout>
 

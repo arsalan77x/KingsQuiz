@@ -36,4 +36,8 @@ public class User {
     public String getUsername() {
         return username;
     }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }

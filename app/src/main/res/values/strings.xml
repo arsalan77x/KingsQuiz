@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">quiz_of_kings</string>
+    <string name="app_name">Quiz of Kings</string>
     <string name="register_name">Register</string>
     <string name="login_name">Login</string>
     <string name="your_email">Your Email</string>

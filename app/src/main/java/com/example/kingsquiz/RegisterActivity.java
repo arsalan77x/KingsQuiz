@@ -41,7 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         MainActivity.userArrayList = new ArrayList<>();
-        MainActivity.userArrayList = MainActivity.userDatabase.readCourses();
+        MainActivity.userArrayList = MainActivity.userDatabase.fetchUsers();
 
         mainMainButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,14 +54,14 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MainActivity.userArrayList = new ArrayList<>();
-                MainActivity.userArrayList = MainActivity.userDatabase.readCourses();
+                MainActivity.userArrayList = MainActivity.userDatabase.fetchUsers();
                 String email = emailText.getText().toString().trim();
                 String password = passwordText.getText().toString();
                 if (email.matches(emailPattern) && email.length() > 0
                         && !isUserExist(email) && password.length() > 3) {
                     MainActivity.userDatabase.addNewUser(email, password,"0","Player");
                     MainActivity.userArrayList = new ArrayList<>();
-                    MainActivity.userArrayList = MainActivity.userDatabase.readCourses();
+                    MainActivity.userArrayList = MainActivity.userDatabase.fetchUsers();
                     Toast.makeText(getApplicationContext(),
                             "you're registered now!", Toast.LENGTH_SHORT).show();
                     launchLoginActivity(v);

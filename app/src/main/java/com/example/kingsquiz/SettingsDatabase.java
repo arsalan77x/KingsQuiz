@@ -53,19 +53,17 @@ public class SettingsDatabase extends SQLiteOpenHelper {
                 SettingsDatabase.QUESTIONS_NUMBER, SettingsDatabase.CATEGORY};
         Cursor cursor = db.query(SettingsDatabase.TABLE_NAME, columns,
                 null,
-//                SettingsDatabase.ID + "=" + 0,
                 null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
-        Log.i("hhhhhhhhhhhhhhhhhhh", cursor.getString(cursor.getColumnIndex(SettingsDatabase.DIFFICULTY)));
         return cursor;
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(CREATE_TABLE);
-        insertSettings(sqLiteDatabase, "Easy", 10, "animals");
+        insertSettings(sqLiteDatabase, "Easy", 10, SettingActivity.categories.get(0));
     }
 
     @Override

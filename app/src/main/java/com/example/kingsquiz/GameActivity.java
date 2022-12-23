@@ -8,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,23 +46,25 @@ public class GameActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
-    NavigationView navigationView;
+    private NavigationView navigationView;
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
-    private String url = "https://opentdb.com/api.php?amount=10&category=23&difficulty=medium&type=multiple";
-    ArrayList<Question> questionArrayList = new ArrayList<>();
-    int index = 0;
-    boolean answered = false;
-    TextView question;
-    TextView page;
-    Button option1;
-    Button option2;
-    Button option3;
-    Button option4;
-    ArrayList<Button> buttons;
-    Button nextQuestion;
-    Button finishQuiz;
-    ProgressDialog progress;
+    private String baseUrl = "https://opentdb.com/api.php?";
+    private ArrayList<Question> questionArrayList = new ArrayList<>();
+    private Question currentQuestion;
+    private TextView question;
+    private TextView page;
+    private Button option1;
+    private Button option2;
+    private Button option3;
+    private Button option4;
+    private ArrayList<Button> buttons;
+    private Button nextQuestion;
+    private Button finishQuiz;
+    private ProgressDialog progress;
+    private Settings settings;
+    private int index = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +84,7 @@ public class GameActivity extends AppCompatActivity implements
         progress.setTitle("Loading");
         progress.setMessage("Wait while loading...");
         progress.setCancelable(false);
-        progress.show();
-        getData();
+
         question = findViewById(R.id.quiz_question);
         page = findViewById(R.id.question_number);
         option1 = findViewById(R.id.option_1);
@@ -100,7 +103,7 @@ public class GameActivity extends AppCompatActivity implements
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (answered) {
+                    if (currentQuestion.answered) {
                         return;
                     }
                     Question question = questionArrayList.get(index);
@@ -110,7 +113,10 @@ public class GameActivity extends AppCompatActivity implements
                     } else {
                         button.setBackgroundColor(Color.GREEN);
                     }
-                    answered = true;
+                    currentQuestion.answered = true;
+                    currentQuestion.userAnswer = (String) button.getText();
+                    currentQuestion.checkUserAnswer();
+                    updateUserScore();
                     if (index == questionArrayList.size() - 1) {
                         finishQuiz.setVisibility(View.VISIBLE);
                     } else {
@@ -131,10 +137,13 @@ public class GameActivity extends AppCompatActivity implements
         finishQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GameActivity.this, MainActivity.class);
-                startActivity(intent);
+                GameActivity.this.finish();
             }
         });
+
+        initializeSettings();
+        progress.show();
+        getData();
 
     }
 
@@ -145,7 +154,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     private void goToNextQuestion() {
-        answered = false;
+        currentQuestion.answered = false;
         nextQuestion.setVisibility(View.GONE);
         index++;
         for (Button button :
@@ -153,6 +162,23 @@ public class GameActivity extends AppCompatActivity implements
             button.setBackgroundColor(Color.BLACK);
         }
         populateData();
+    }
+
+    private void updateUserScore() {
+        int score = 0;
+        if (currentQuestion.answered) {
+            int difficulty = Settings.getDifficultyValue(settings.difficulty);
+            Log.i("aaaaaaaaaaaaaaaaaa", currentQuestion.isUserAnswerCorrect + "");
+            if (currentQuestion.isUserAnswerCorrect) {
+                score += 3 * difficulty;
+            } else {
+                score -= difficulty;
+            }
+            int finalScore = MainActivity.userLoggedIn.getScore() + score;
+            MainActivity.userDatabase.updateScore(MainActivity.userLoggedIn.getEmail(),
+                    finalScore);
+            MainActivity.userLoggedIn.setScore(finalScore);
+        }
     }
 
     private String[] getRandomSortOfArray(String[] strings) {
@@ -163,8 +189,8 @@ public class GameActivity extends AppCompatActivity implements
 
     private void populateData() {
         Question firstQuestion = questionArrayList.get(index);
+        currentQuestion = firstQuestion;
         question.setText(firstQuestion.getQuestion());
-        Log.i("aaaaaaaaaaaaaaa", firstQuestion.getWrongAnswers().length + "");
         String[] shuffledArray = getRandomSortOfArray(
                 new String[]{firstQuestion.getWrongAnswers()[0],
                         firstQuestion.getWrongAnswers()[1],
@@ -180,7 +206,8 @@ public class GameActivity extends AppCompatActivity implements
     private void getData() {
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
         mRequestQueue = Volley.newRequestQueue(this);
-        Toast.makeText(getApplicationContext(), "Response :", Toast.LENGTH_LONG).show();//display the response on screen
+        String url = getUrl();
+        Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
         mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -191,19 +218,35 @@ public class GameActivity extends AppCompatActivity implements
                     }.getType();
                     questionArrayList = gson.fromJson(jsonObject.get("results").toString(), type);
                     populateData();
-                    progress.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                progress.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();//display the response on screen
+                progress.dismiss();
+                GameActivity.this.finish();
             }
         });
 
         mRequestQueue.add(mStringRequest);
+    }
+
+    @SuppressLint("Range")
+    private void initializeSettings() {
+        Cursor cursor = MainActivity.settingsDatabase.fetchSettings();
+        String amount = cursor.getString(cursor.getColumnIndex(SettingsDatabase.QUESTIONS_NUMBER));
+        String difficulty = cursor.getString(cursor.getColumnIndex(SettingsDatabase.DIFFICULTY));
+        String category = cursor.getString(cursor.getColumnIndex(SettingsDatabase.CATEGORY));
+        int categoryValue = SettingActivity.categories.indexOf(category) + 9;
+        settings = new Settings(Integer.parseInt(amount), categoryValue, difficulty);
+    }
+
+    private String getUrl() {
+        return baseUrl + "amount=" + settings.questionAmount + "&category=" + settings.category + "&difficulty="
+                + settings.difficulty.toLowerCase() + "&type=multiple";
     }
 
     @Override
@@ -215,6 +258,7 @@ public class GameActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
