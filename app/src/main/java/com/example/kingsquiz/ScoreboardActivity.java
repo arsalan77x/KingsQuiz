@@ -1,5 +1,7 @@
 package com.example.kingsquiz;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -9,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,7 +38,8 @@ public class ScoreboardActivity extends AppCompatActivity {
             this.setTheme(R.style.Theme2);
         }
         setContentView(R.layout.activity_scoreboard);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         Collections.sort(MainActivity.userArrayList, new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {
@@ -180,7 +184,6 @@ public class ScoreboardActivity extends AppCompatActivity {
 
         }
 
-        Button mainMenuButton = new Button(this);
         params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -188,28 +191,23 @@ public class ScoreboardActivity extends AppCompatActivity {
         params.setMargins(0,40,0,0);
         params.setMarginEnd(40);
         params.setMarginStart(40);
-        mainMenuButton.setLayoutParams(params);
-        mainMenuButton.setText("MAIN MENU");
-        parent.addView(mainMenuButton);
-
-        mainMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchMainMenuActivity(v);
-            }
-        });
-
-    }
-
-    private void launchMainMenuActivity(View view){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 
     private void launchUserInfoActivity(View view){
         Intent intent = new Intent(this, UserInfoActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
 }

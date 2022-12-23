@@ -2,13 +2,18 @@ package com.example.kingsquiz;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -34,7 +40,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener {
+    public DrawerLayout drawerLayout;
+    public ActionBarDrawerToggle actionBarDrawerToggle;
+    NavigationView navigationView;
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
     private String url = "https://opentdb.com/api.php?amount=10&category=23&difficulty=medium&type=multiple";
@@ -56,6 +66,16 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.nav_open, R.string.nav_close);
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         progress = new ProgressDialog(this);
         progress.setTitle("Loading");
         progress.setMessage("Wait while loading...");
@@ -184,5 +204,33 @@ public class GameActivity extends AppCompatActivity {
         });
 
         mRequestQueue.add(mStringRequest);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        Intent intent;
+        switch (id) {
+            case R.id.nav_scoreboard:
+                intent = new Intent(GameActivity.this, ScoreboardActivity.class);
+                break;
+            case R.id.nav_profile:
+                intent = new Intent(GameActivity.this, ProfileActivity.class);
+                break;
+            default:
+                intent = new Intent(GameActivity.this, SettingActivity.class);
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        startActivity(intent);
+        return true;
     }
 }

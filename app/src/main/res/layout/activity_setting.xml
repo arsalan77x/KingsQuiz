@@ -189,18 +189,6 @@
 
     </LinearLayout>
 
-        <Button
-            android:id="@+id/mainMenuButton"
-            android:layout_width="match_parent"
-            android:layout_marginEnd="20pt"
-            android:layout_marginStart="20pt"
-            android:layout_marginTop="10dp"
-            android:layout_height="wrap_content"
-            android:text="@string/main_menu"
-            />
-
-
-
     </LinearLayout>
 
 </ScrollView>

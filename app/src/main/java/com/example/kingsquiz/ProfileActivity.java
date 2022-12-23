@@ -1,5 +1,7 @@
 package com.example.kingsquiz;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -8,6 +10,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,22 +32,17 @@ public class ProfileActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_profile);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         Button logoutButton = (Button) findViewById(R.id.logoutButton);
         Button applyEmail = (Button) findViewById(R.id.applyButton);
         Button applyPass = (Button) findViewById(R.id.applyButton2);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) Button applyUser = (Button) findViewById(R.id.applyButton3);
-        Button mainMenuButton = (Button) findViewById(R.id.mainMenuButton);
         EditText changeEmail = (EditText) findViewById(R.id.changeEmailText);
         EditText changePassword = (EditText) findViewById(R.id.changePasswordText);
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) EditText changeUsername = (EditText) findViewById(R.id.changeUserName);
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
-        mainMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchMainMenuActivity(v);
-            }
-        });
 
         applyEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,8 +131,14 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
-    private void launchMainMenuActivity(View view){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,20 +1,20 @@
 package com.example.kingsquiz;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -39,7 +39,8 @@ public class SettingActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_setting);
 
-        Button mainMainButton = (Button) findViewById(R.id.mainMenuButton);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         Button increaseButton1 = (Button) findViewById(R.id.increaseButton1);
         Button increaseButton2 = (Button) findViewById(R.id.increaseButton2);
         Button increaseButton3 = (Button) findViewById(R.id.increaseButton3);
@@ -55,13 +56,6 @@ public class SettingActivity extends AppCompatActivity {
 
         settingsDatabase = new SettingsDatabase(SettingActivity.this);
         initializeSettings();
-
-        mainMainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchMainMenuActivity(v);
-            }
-        });
 
         increaseButton1.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
@@ -158,8 +152,14 @@ public class SettingActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void launchMainMenuActivity(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

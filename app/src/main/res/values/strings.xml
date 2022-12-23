@@ -45,4 +45,6 @@
     <string name="light">Light</string>
     <string name="themes">Themes</string>
     <string name="easy">Easy</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>
