@@ -58,11 +58,20 @@ public class ReviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         itemViewHolder.option3.setText(question.options[2]);
         itemViewHolder.option4.setText(question.options[3]);
         itemViewHolder.page.setText(position + 1 + " / " + listRecyclerItem.size());
-        Button correctButton = itemViewHolder.option1.getText().equals(question.getCorrectAnswer()) ?
-                itemViewHolder.option1 : itemViewHolder.option2.getText().equals(question.getCorrectAnswer()) ?
-                itemViewHolder.option2 : itemViewHolder.option3.getText().equals(question.getCorrectAnswer()) ?
-                itemViewHolder.option3 : itemViewHolder.option4;
-        correctButton.setBackgroundColor(Color.GREEN);
+        Button[] buttons = new Button[]{
+                itemViewHolder.option1,
+                itemViewHolder.option2,
+                itemViewHolder.option3,
+                itemViewHolder.option4
+        };
+        for (Button button :
+                buttons) {
+            if (button.getText().equals(question.getCorrectAnswer())) {
+                button.setBackgroundColor(Color.GREEN);
+            } else {
+                button.setBackgroundColor(Color.BLACK);
+            }
+        }
     }
 
     @Override

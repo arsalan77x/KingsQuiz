@@ -41,6 +41,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,11 +65,14 @@ public class GameActivity extends AppCompatActivity implements
     private Button nextQuestion;
     private Button finishQuiz;
     private Button viewAllQuestions;
+    private TextView newScoreText;
     private LinearLayout endQuizContainer;
     private ProgressDialog progress;
     private Settings settings;
     private int index = 0;
     private String quizID;
+    private int topScoreboardScore;
+    public static boolean offlineMode = false;
 
 
     @Override
@@ -100,6 +104,7 @@ public class GameActivity extends AppCompatActivity implements
         finishQuiz = findViewById(R.id.end_quiz_button);
         viewAllQuestions = findViewById(R.id.view_all_questions_button);
         endQuizContainer = findViewById(R.id.end_quiz_container);
+        newScoreText = findViewById(R.id.new_score_text);
         buttons = new ArrayList<>();
         buttons.add(option1);
         buttons.add(option2);
@@ -125,6 +130,7 @@ public class GameActivity extends AppCompatActivity implements
                     currentQuestion.checkUserAnswer();
                     updateUserScore();
                     if (index == questionArrayList.size() - 1) {
+                        checkIsRecordBroken();
                         endQuizContainer.setVisibility(View.VISIBLE);
                     } else {
                         nextQuestion.setVisibility(View.VISIBLE);
@@ -156,9 +162,15 @@ public class GameActivity extends AppCompatActivity implements
             }
         });
 
+        initilizeTopScoreboardScore();
         initializeSettings();
-        progress.show();
-        getData();
+        if (!offlineMode) {
+            progress.show();
+            getData();
+        } else {
+            populateData();
+            offlineMode = false;
+        }
 
     }
 
@@ -177,6 +189,31 @@ public class GameActivity extends AppCompatActivity implements
             button.setBackgroundColor(Color.BLACK);
         }
         populateData();
+    }
+
+    private void initilizeTopScoreboardScore() {
+        Collections.sort(MainActivity.userArrayList, new Comparator<User>() {
+            @Override
+            public int compare(User o1, User o2) {
+                return Math.round(o2.getScore() - (o1.getScore()));
+            }
+        });
+        topScoreboardScore = MainActivity.userArrayList.get(0).getScore();
+    }
+
+    private void checkIsRecordBroken() {
+        MainActivity.userArrayList = MainActivity.userDatabase.fetchUsers();
+        for (User user :
+                MainActivity.userArrayList) {
+            if (user.getEmail().equals(MainActivity.userLoggedIn.getEmail())) {
+                if (user.getScore() > topScoreboardScore) {
+                    newScoreText.setVisibility(View.VISIBLE);
+                    return;
+                } else {
+                    newScoreText.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     private void updateUserScore() {
@@ -237,6 +274,8 @@ public class GameActivity extends AppCompatActivity implements
                             questionArrayList) {
                         MainActivity.questionDatabase.insertQuestion(question, quizID);
                     }
+                    Quiz quiz = new Quiz(quizID, questionArrayList.size(), settings.difficulty);
+                    MainActivity.quizDatabase.insertQuiz(quiz);
                     populateData();
                 } catch (JSONException e) {
                     e.printStackTrace();

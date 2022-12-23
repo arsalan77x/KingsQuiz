@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static DataBaseUser userDatabase;
     public static SettingsDatabase settingsDatabase;
     public static QuestionDatabase questionDatabase;
+    public static QuizDatabase quizDatabase;
     public static ArrayList<User> userArrayList;
     public static final int DB_VERSION = 1;
 
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         settingsDatabase = new SettingsDatabase(MainActivity.this);
         questionDatabase = new QuestionDatabase(MainActivity.this);
+        quizDatabase = new QuizDatabase(MainActivity.this);
         userDatabase = new DataBaseUser(MainActivity.this);
         userArrayList = new ArrayList<>();
         userArrayList = userDatabase.fetchUsers();
@@ -86,6 +91,20 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() !=
+                        NetworkInfo.State.CONNECTED &&
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() !=
+                                NetworkInfo.State.CONNECTED) {
+                    Toast.makeText(getApplicationContext(),
+                            "You are not connected to the internet! Offline mode is on",
+                            Toast.LENGTH_SHORT).show();
+                    GameActivity.offlineMode = true;
+                    Cursor cursor = settingsDatabase.fetchSettings();
+                    String difficulty = cursor.getString(cursor.getColumnIndex(SettingsDatabase.DIFFICULTY));
+                    String quizID = quizDatabase.getQuizIdByDifficulty(difficulty);
+                    GameActivity.questionArrayList = questionDatabase.fetchQuestions(quizID);
+                }
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(intent);
             }

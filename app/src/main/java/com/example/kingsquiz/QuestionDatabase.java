@@ -1,12 +1,20 @@
 package com.example.kingsquiz;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class QuestionDatabase extends SQLiteOpenHelper {
     public static final String DB_NAME = "questionDB";
@@ -28,6 +36,50 @@ public class QuestionDatabase extends SQLiteOpenHelper {
 
     public QuestionDatabase(Context context) {
         super(context, DB_NAME, null, MainActivity.DB_VERSION);
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<Question> fetchQuestions(String quizID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String[] columns = new String[]{
+                QUESTION,
+                ID,
+                QUIZ_ID,
+                CORRECT_ANSWER,
+                WRONG_ANSWERS,
+                ANSWERED,
+                USER_ANSWER,
+                IS_USER_ANSWER_CORRECT};
+        Cursor cursor = db.query(TABLE_NAME, columns,
+                QUIZ_ID + "=" + quizID,
+                null, null, null, null);
+        ArrayList<Question> questionArrayList = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                String title = cursor.getString(cursor.getColumnIndex(QUESTION));
+                String correctAnswer = cursor.getString(cursor.getColumnIndex(CORRECT_ANSWER));
+                String wrongAnswers = cursor.getString(cursor.getColumnIndex(WRONG_ANSWERS));
+                ArrayList<String> stringArray = new ArrayList<>();
+                try {
+                    JSONArray jsonArray = new JSONArray(wrongAnswers);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        stringArray.add(jsonArray.getString(i));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Question question = new Question(title
+                        , correctAnswer
+                        , stringArray.toArray(new String[0])
+                );
+                questionArrayList.add(question);
+
+            } while (cursor.moveToNext());
+
+        }
+
+        cursor.close();
+        return questionArrayList;
     }
 
     public void insertQuestion(Question question, String quizID) {
