@@ -14,6 +14,7 @@ public class Question {
     public boolean answered = false;
     public String userAnswer;
     public boolean isUserAnswerCorrect;
+    public String[] options;
 
     public Question(String question, String correctAnswer, String[] wrongAnswers) {
         this.question = question;

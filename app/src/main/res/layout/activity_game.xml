@@ -83,22 +83,38 @@
                 android:text="Next Question"
                 android:visibility="gone" />
 
-            <Button
-                android:id="@+id/end_quiz_button"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/end_quiz_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Finish Quiz"
-                android:visibility="gone" />
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/end_quiz_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    android:text="Finish Quiz" />
+
+                <Button
+                    android:id="@+id/view_all_questions_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Review All" />
+            </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:id="@+id/navigation_view"
         app:menu="@menu/navigation_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -13,9 +13,7 @@ import java.util.ArrayList;
 
 public class DataBaseUser extends SQLiteOpenHelper {
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String name = "userDB";
-    private static final int version = 1;
+    private static final String DB_NAME = "userDataDB";
     private static final String TABLE_NAME = "userData";
     private static final String ID_COL = "id";
     private static final String EMAIL_COL = "email";
@@ -23,12 +21,8 @@ public class DataBaseUser extends SQLiteOpenHelper {
     private static final String SCORE_COL = "score";
     private static final String USERNAME_COL = "username";
 
-    public DataBaseUser(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, null, version);
-    }
-
-    public DataBaseUser(MainActivity context) {
-        super(context, name, null, version);
+    public DataBaseUser(Context context) {
+        super(context, DB_NAME, null, MainActivity.DB_VERSION);
     }
 
 
@@ -39,7 +33,7 @@ public class DataBaseUser extends SQLiteOpenHelper {
                 + EMAIL_COL + " TEXT,"
                 + PASSWORD_COL + " TEXT,"
                 + SCORE_COL + " TEXT,"
-                + USERNAME_COL+ " TEXT)";
+                + USERNAME_COL + " TEXT)";
 
         sqLiteDatabase.execSQL(query);
     }
@@ -64,14 +58,15 @@ public class DataBaseUser extends SQLiteOpenHelper {
         values.put(PASSWORD_COL, password);
         values.put(SCORE_COL, score);
         values.put(USERNAME_COL, username);
-        db.update(TABLE_NAME,  values, "email=?", new String[]{lastEmail});
+        db.update(TABLE_NAME, values, "email=?", new String[]{lastEmail});
         db.close();
     }
+
     public void updateScore(String email, int score) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(SCORE_COL, score);
-        db.update(TABLE_NAME,  values, "email=?", new String[]{email});
+        db.update(TABLE_NAME, values, "email=?", new String[]{email});
         db.close();
     }
 
@@ -82,11 +77,9 @@ public class DataBaseUser extends SQLiteOpenHelper {
         values.put(PASSWORD_COL, password);
         values.put(SCORE_COL, score);
         values.put(USERNAME_COL, username);
-        db.update(TABLE_NAME,  values, "password=?", new String[]{lastPass});
+        db.update(TABLE_NAME, values, "password=?", new String[]{lastPass});
         db.close();
     }
-
-
 
 
     public ArrayList<User> fetchUsers() {
@@ -97,8 +90,8 @@ public class DataBaseUser extends SQLiteOpenHelper {
         if (cursorUser.moveToFirst()) {
             do {
                 userArrayList.add(new User(cursorUser.getString(1),
-                        cursorUser.getString(2),Integer.parseInt(cursorUser.getString(3)),
-                        cursorUser.getString(4) ));
+                        cursorUser.getString(2), Integer.parseInt(cursorUser.getString(3)),
+                        cursorUser.getString(4)));
             } while (cursorUser.moveToNext());
 
         }

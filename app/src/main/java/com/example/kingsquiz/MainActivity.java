@@ -22,12 +22,13 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     public static User userLoggedIn;
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static SQLiteDatabase loggedInUser;
     String email = "";
     public static DataBaseUser userDatabase;
     public static SettingsDatabase settingsDatabase;
+    public static QuestionDatabase questionDatabase;
     public static ArrayList<User> userArrayList;
+    public static final int DB_VERSION = 1;
 
     @SuppressLint("ResourceType")
     @Override
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         Button scoreboardButton = (Button) findViewById(R.id.scoreboardButton);
 
         settingsDatabase = new SettingsDatabase(MainActivity.this);
+        questionDatabase = new QuestionDatabase(MainActivity.this);
         userDatabase = new DataBaseUser(MainActivity.this);
         userArrayList = new ArrayList<>();
         userArrayList = userDatabase.fetchUsers();

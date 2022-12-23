@@ -9,20 +9,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class SettingsDatabase extends SQLiteOpenHelper {
+    private static final String DB_NAME = "settingsDB";
     public static final String TABLE_NAME = "SETTINGS";
     public static final String DIFFICULTY = "difficulty";
     public static final String ID = "id";
     public static final String QUESTIONS_NUMBER = "questions_numbers";
     public static final String CATEGORY = "category";
-    static final String DB_NAME = "JOURNALDEV_COUNTRIES.DB";
-    static final int DB_VERSION = 1;
     private static final String CREATE_TABLE = "create table " +
             TABLE_NAME + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + DIFFICULTY + " TEXT NOT NULL, " + QUESTIONS_NUMBER + " INTEGER, "
             + CATEGORY + " TEXT);";
 
     public SettingsDatabase(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, DB_NAME, null, MainActivity.DB_VERSION);
     }
 
     public void updateSettings(String difficulty, Integer questionNumbers, String category) {
@@ -62,6 +61,7 @@ public class SettingsDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        Log.i("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr", "create settings table");
         sqLiteDatabase.execSQL(CREATE_TABLE);
         insertSettings(sqLiteDatabase, "Easy", 10, SettingActivity.categories.get(0));
     }

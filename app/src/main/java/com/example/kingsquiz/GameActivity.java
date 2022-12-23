@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class GameActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
@@ -50,7 +52,7 @@ public class GameActivity extends AppCompatActivity implements
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
     private String baseUrl = "https://opentdb.com/api.php?";
-    private ArrayList<Question> questionArrayList = new ArrayList<>();
+    public static ArrayList<Question> questionArrayList = new ArrayList<>();
     private Question currentQuestion;
     private TextView question;
     private TextView page;
@@ -61,9 +63,12 @@ public class GameActivity extends AppCompatActivity implements
     private ArrayList<Button> buttons;
     private Button nextQuestion;
     private Button finishQuiz;
+    private Button viewAllQuestions;
+    private LinearLayout endQuizContainer;
     private ProgressDialog progress;
     private Settings settings;
     private int index = 0;
+    private String quizID;
 
 
     @Override
@@ -93,6 +98,8 @@ public class GameActivity extends AppCompatActivity implements
         option4 = findViewById(R.id.option_4);
         nextQuestion = findViewById(R.id.next_question_button);
         finishQuiz = findViewById(R.id.end_quiz_button);
+        viewAllQuestions = findViewById(R.id.view_all_questions_button);
+        endQuizContainer = findViewById(R.id.end_quiz_container);
         buttons = new ArrayList<>();
         buttons.add(option1);
         buttons.add(option2);
@@ -118,7 +125,7 @@ public class GameActivity extends AppCompatActivity implements
                     currentQuestion.checkUserAnswer();
                     updateUserScore();
                     if (index == questionArrayList.size() - 1) {
-                        finishQuiz.setVisibility(View.VISIBLE);
+                        endQuizContainer.setVisibility(View.VISIBLE);
                     } else {
                         nextQuestion.setVisibility(View.VISIBLE);
                     }
@@ -141,13 +148,21 @@ public class GameActivity extends AppCompatActivity implements
             }
         });
 
+        viewAllQuestions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GameActivity.this, ReviewQuestionsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         initializeSettings();
         progress.show();
         getData();
 
     }
 
-    private Button getCorrectButton(String correctAnswer) {
+    public Button getCorrectButton(String correctAnswer) {
         return option1.getText().equals(correctAnswer) ? option1 :
                 option2.getText().equals(correctAnswer) ? option2 :
                         option3.getText().equals(correctAnswer) ? option3 : option4;
@@ -168,7 +183,6 @@ public class GameActivity extends AppCompatActivity implements
         int score = 0;
         if (currentQuestion.answered) {
             int difficulty = Settings.getDifficultyValue(settings.difficulty);
-            Log.i("aaaaaaaaaaaaaaaaaa", currentQuestion.isUserAnswerCorrect + "");
             if (currentQuestion.isUserAnswerCorrect) {
                 score += 3 * difficulty;
             } else {
@@ -196,10 +210,11 @@ public class GameActivity extends AppCompatActivity implements
                         firstQuestion.getWrongAnswers()[1],
                         firstQuestion.getWrongAnswers()[2],
                         firstQuestion.getCorrectAnswer()});
-        option1.setText(shuffledArray[3]);
-        option2.setText(shuffledArray[0]);
-        option3.setText(shuffledArray[1]);
-        option4.setText(shuffledArray[2]);
+        currentQuestion.options = shuffledArray;
+        option1.setText(shuffledArray[0]);
+        option2.setText(shuffledArray[1]);
+        option3.setText(shuffledArray[2]);
+        option4.setText(shuffledArray[3]);
         page.setText(index + 1 + " / " + questionArrayList.size());
     }
 
@@ -217,6 +232,11 @@ public class GameActivity extends AppCompatActivity implements
                     Type type = new TypeToken<List<Question>>() {
                     }.getType();
                     questionArrayList = gson.fromJson(jsonObject.get("results").toString(), type);
+                    quizID = UUID.randomUUID().toString();
+                    for (Question question :
+                            questionArrayList) {
+                        MainActivity.questionDatabase.insertQuestion(question, quizID);
+                    }
                     populateData();
                 } catch (JSONException e) {
                     e.printStackTrace();
