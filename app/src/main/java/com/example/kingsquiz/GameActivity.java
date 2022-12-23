@@ -49,6 +49,8 @@ public class GameActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener {
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
     private NavigationView navigationView;
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
@@ -270,6 +272,7 @@ public class GameActivity extends AppCompatActivity implements
                     }.getType();
                     questionArrayList = gson.fromJson(jsonObject.get("results").toString(), type);
                     quizID = UUID.randomUUID().toString();
+
                     for (Question question :
                             questionArrayList) {
                         MainActivity.questionDatabase.insertQuestion(question, quizID);
@@ -286,7 +289,14 @@ public class GameActivity extends AppCompatActivity implements
             @Override
             public void onErrorResponse(VolleyError error) {
                 progress.dismiss();
-                GameActivity.this.finish();
+                Toast.makeText(getApplicationContext(),
+                        "You are not connected to the internet! Offline mode is on",
+                        Toast.LENGTH_SHORT).show();
+                String quizID = MainActivity.quizArrayList.get(0).quizID;
+                questionArrayList = MainActivity.questionDatabase.fetchQuestions(quizID);
+
+                populateData();
+              //  GameActivity.this.finish();
             }
         });
 

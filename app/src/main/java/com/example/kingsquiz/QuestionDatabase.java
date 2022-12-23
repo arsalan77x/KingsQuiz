@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,9 +16,10 @@ import org.json.JSONException;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class QuestionDatabase extends SQLiteOpenHelper {
-    public static final String DB_NAME = "questionDB";
+    public static final String DB_NAME = "DBQuestion";
     public static final String TABLE_NAME = "QUESTIONS";
     public static final String QUESTION = "question";
     public static final String ID = "id";
@@ -33,6 +35,7 @@ public class QuestionDatabase extends SQLiteOpenHelper {
             + ANSWERED + " TEXT, " + USER_ANSWER + " TEXT, "
             + QUIZ_ID + " TEXT, "
             + IS_USER_ANSWER_CORRECT + " TEXT, " + WRONG_ANSWERS + " TEXT);";
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     public QuestionDatabase(Context context) {
         super(context, DB_NAME, null, MainActivity.DB_VERSION);
@@ -50,29 +53,33 @@ public class QuestionDatabase extends SQLiteOpenHelper {
                 ANSWERED,
                 USER_ANSWER,
                 IS_USER_ANSWER_CORRECT};
-        Cursor cursor = db.query(TABLE_NAME, columns,
-                QUIZ_ID + "=" + quizID,
-                null, null, null, null);
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Log.d(LOG_TAG,  quizID+"!!!");
         ArrayList<Question> questionArrayList = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
-                String title = cursor.getString(cursor.getColumnIndex(QUESTION));
-                String correctAnswer = cursor.getString(cursor.getColumnIndex(CORRECT_ANSWER));
-                String wrongAnswers = cursor.getString(cursor.getColumnIndex(WRONG_ANSWERS));
-                ArrayList<String> stringArray = new ArrayList<>();
-                try {
-                    JSONArray jsonArray = new JSONArray(wrongAnswers);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        stringArray.add(jsonArray.getString(i));
+                Log.d(LOG_TAG,  cursor.getString(0)+cursor.getString(1)+
+                        cursor.getString(2)+cursor.getString(3)+cursor.getString(4)+"???");
+                if(Objects.equals(quizID, cursor.getString(5))){
+                    String title = cursor.getString(cursor.getColumnIndex(QUESTION));
+                    String correctAnswer = cursor.getString(cursor.getColumnIndex(CORRECT_ANSWER));
+                    String wrongAnswers = cursor.getString(cursor.getColumnIndex(WRONG_ANSWERS));
+                    ArrayList<String> stringArray = new ArrayList<>();
+                    try {
+                        JSONArray jsonArray = new JSONArray(wrongAnswers);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            stringArray.add(jsonArray.getString(i));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Question question = new Question(title
+                            , correctAnswer
+                            , stringArray.toArray(new String[0])
+                    );
+                    questionArrayList.add(question);
                 }
-                Question question = new Question(title
-                        , correctAnswer
-                        , stringArray.toArray(new String[0])
-                );
-                questionArrayList.add(question);
 
             } while (cursor.moveToNext());
 
@@ -86,16 +93,14 @@ public class QuestionDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(QUESTION, question.getQuestion());
-        contentValues.put(QUIZ_ID, quizID);
         contentValues.put(CORRECT_ANSWER, question.getCorrectAnswer());
         contentValues.put(ANSWERED, question.answered);
         contentValues.put(USER_ANSWER, question.userAnswer);
+        contentValues.put(QUIZ_ID, quizID);
         contentValues.put(IS_USER_ANSWER_CORRECT, question.isUserAnswerCorrect);
-
         Gson gson = new GsonBuilder().create();
         String jsonArray = gson.toJson(question.getWrongAnswers());
         contentValues.put(WRONG_ANSWERS, jsonArray);
-
         db.insert(TABLE_NAME, null, contentValues);
     }
 
@@ -109,4 +114,7 @@ public class QuestionDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
+
+
+
 }

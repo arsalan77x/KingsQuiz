@@ -10,8 +10,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+
 public class QuizDatabase extends SQLiteOpenHelper {
-    public static final String DB_NAME = "quizDB";
+    public static final String DB_NAME = "DBQuiz";
     public static final String TABLE_NAME = "QUIZ";
     public static final String QUESTION_COUNT = "question_count";
     public static final String ID = "id";
@@ -46,8 +48,10 @@ public class QuizDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(QUIZ_ID, quiz.quizID);
+        contentValues.put(QUESTION_COUNT, Integer.toString(quiz.questionsCount));
+        contentValues.put(DIFFICULTY, quiz.difficulty);
         contentValues.put(DATE, quiz.date.toString());
-        contentValues.put(QUESTION_COUNT, quiz.questionsCount);
+
         db.insert(TABLE_NAME, null, contentValues);
     }
 
@@ -61,4 +65,21 @@ public class QuizDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
+    public ArrayList<Quiz> fetchQuiz() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursorQuiz = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        ArrayList<Quiz> quizArrayList = new ArrayList<>();
+
+        if (cursorQuiz.moveToFirst()) {
+            do {
+                quizArrayList.add(new Quiz(cursorQuiz.getString(3),
+                        Integer.parseInt(cursorQuiz.getString(1)), cursorQuiz.getString(2)));
+            } while (cursorQuiz.moveToNext());
+
+        }
+
+        cursorQuiz.close();
+        return quizArrayList;
+    }
+
 }

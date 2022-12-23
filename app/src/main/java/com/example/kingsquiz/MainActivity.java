@@ -32,7 +32,10 @@ public class MainActivity extends AppCompatActivity {
     public static QuestionDatabase questionDatabase;
     public static QuizDatabase quizDatabase;
     public static ArrayList<User> userArrayList;
+    public static ArrayList<Quiz> quizArrayList;
     public static final int DB_VERSION = 1;
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+
 
     @SuppressLint("ResourceType")
     @Override
@@ -58,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         userDatabase = new DataBaseUser(MainActivity.this);
         userArrayList = new ArrayList<>();
         userArrayList = userDatabase.fetchUsers();
+        quizArrayList = new ArrayList<>();
+        quizArrayList = quizDatabase.fetchQuiz();
+
 
 
         loggedInUser = openOrCreateDatabase("loggedInUser", MODE_PRIVATE, null);
